@@ -1,6 +1,6 @@
 flask-swagger-ui
 pandas
-tensorflow
+tensorflow-cpu
 numpy
 flask
 scikit-learn
