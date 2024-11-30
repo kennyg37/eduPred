@@ -1,22 +1,36 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, redirect, request, send_from_directory
 from dotenv import load_dotenv
 import numpy as np
 from src.prediction import predict, scale_features, scale_student_data
 # from src.preprocessing import scale_data
 from src.retraining import retrain_model, retrain_student_model
+from flask_swagger_ui import get_swaggerui_blueprint
+from werkzeug.utils import secure_filename
 
 load_dotenv()
 
 app = Flask(__name__)
 
 port = int(os.getenv("PORT", 5000))
+API_URL = '/static/swagger.json'
+
+UPLOAD_FOLDER = '/temporary/uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+swaggerui_bluprint = get_swaggerui_blueprint('/docs', API_URL)
+app.register_blueprint(swaggerui_bluprint)
 
 # Load the model when the app starts
 MODEL_PATH = './model/edupred.keras'
 model = None
 STUDENT_MODEL_PATH = './model/student_model.keras'
 student_model = None
+
+@app.route('/', methods=['GET'])
+def home():
+    return redirect('/docs')
 
 if os.path.exists(MODEL_PATH):
     from tensorflow.keras.models import load_model # type: ignore
@@ -66,15 +80,22 @@ def predict_student_endpoint():
     if student_model is None:
         return jsonify({"error": "Model not loaded. Retrain the model first."}), 500
 
+    expected_features = ['Age', 'Gender', 'Ethnicity', 'Parental Education', 'Weekly study time', 'Absences', 'Tutoring', 'Parental support', 'extracullicular', 'sports', 'music', 'volunteering']
+
     data = request.json.get('features', None)
     if data is None:
         return jsonify({"error": "No features provided for prediction"}), 400
 
+    missing_keys = [key for key in expected_features if key not in data]
+    if missing_keys:
+        return jsonify({"error": f"Missing keys: {missing_keys}"}), 400
     try:
-        data = np.array(data).reshape(1, -1) 
-        scaled_features = scale_student_data(data)
+        feature_array = [data[key] for key in expected_features]
+        feature_array = np.array(feature_array).reshape(1, -1)
+        scaled_features = scale_student_data(feature_array)
         predictions = predict(student_model, scaled_features)
-        return jsonify({"predictions": predictions.tolist()})
+        predictions = [int(pred) if isinstance(pred, np.integer) else float(pred) for pred in predictions]
+        return jsonify({"predicted_gpa": predictions})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -83,8 +104,16 @@ def retrain_student_endpoint():
     """Endpoint to retrain the model."""
     global student_model
     try:
-        # Retrain the model using the retrain_model function
-        new_model = retrain_student_model()
+        file = request.files.get('file')
+        
+        if file:
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+        else:
+            file_path = './data/Student_performance_data _.csv'
+        # Retrain the mode using the retrain_model funtion
+        new_model = retrain_student_model(file_path)
         new_model.save(STUDENT_MODEL_PATH)
         student_model = new_model
         return jsonify({"message": "Model retrained successfully."})

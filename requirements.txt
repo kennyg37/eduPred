@@ -1,0 +1,9 @@
+flask-swagger-ui
+pandas
+tensorflow
+numpy
+flask
+scikit-learn
+matplotlib
+seaborn
+python-dotenv

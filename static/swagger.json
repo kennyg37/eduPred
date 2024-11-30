@@ -1,0 +1,187 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "EduPred API",
+        "version": "1.0",
+        "description": "API for educational predictions and model retraining."
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "schemes": ["http"],
+    "paths": {
+        "/edupred/predict": {
+            "post": {
+                "summary": "Make a prediction with the educational model.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "features": {
+                                    "type": "array",
+                                    "items": { "type": "number" }
+                                }
+                            },
+                            "required": ["features"],
+                            "example": {
+                                "features": [1.5, 2.3, 3.7]
+                            }
+                        },
+                        "description": "Array of features for prediction."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Prediction result.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "predictions": {
+                                    "type": "array",
+                                    "items": { "type": "number" }
+                                }
+                            }
+                        }
+                    },
+                    "400": { "description": "Invalid input. Check the request body." },
+                    "500": { "description": "Server error." }
+                }
+            }
+        },
+        "/edupred/retrain": {
+            "post": {
+                "summary": "Retrain the educational model.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "features": {
+                                                "type": "array",
+                                                "items": { "type": "number" }
+                                            },
+                                            "target": { "type": "number" }
+                                        },
+                                        "required": ["features", "target"],
+                                        "example": {
+                                            "features": [1.5, 2.3, 3.7],
+                                            "target": 0
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Array of data points for retraining."
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Model retrained successfully." },
+                    "400": { "description": "Invalid input. Check the request body." },
+                    "500": { "description": "Server error." }
+                }
+            }
+        },
+        "/student/predict": {
+            "post": {
+                "summary": "Make a prediction with the student model.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "features": {
+                                    "type": "array",
+                                    "items": { "type": "number" }
+                                }
+                            },
+                            "required": ["features"],
+                            "example": {
+                                "features": [1.5, 2.3, 3.7]
+                            }
+                        },
+                        "description": "Array of features for prediction."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Prediction result.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "predictions": {
+                                    "type": "array",
+                                    "items": { "type": "number" }
+                                }
+                            }
+                        }
+                    },
+                    "400": { "description": "Invalid input. Check the request body." },
+                    "500": { "description": "Server error." }
+                }
+            }
+        },
+        "/student/retrain": {
+            "post": {
+                "summary": "Retrain the student model.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "features": {
+                                                "type": "array",
+                                                "items": { "type": "number" }
+                                            },
+                                            "target": { "type": "number" }
+                                        },
+                                        "required": ["features", "target"],
+                                        "example": {
+                                            "features": [1.5, 2.3, 3.7],
+                                            "target": 0
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Array of data points for retraining."
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Model retrained successfully." },
+                    "400": { "description": "Invalid input. Check the request body." },
+                    "500": { "description": "Server error." }
+                }
+            }
+        }
+    }
+}
