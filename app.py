@@ -15,7 +15,7 @@ app = Flask(__name__)
 port = int(os.getenv("PORT", 5000))
 API_URL = '/static/swagger.json'
 
-UPLOAD_FOLDER = '/temporary/uploads'
+UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
