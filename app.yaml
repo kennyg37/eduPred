@@ -1,0 +1,8 @@
+runtime: python310
+entrypoint: waitress-serve --listen=0.0.0.0:5000 app:app 
+
+env_variables:
+  FLASK_ENV: "production" 
+  API_URL: "/static/swagger.json"
+
+instance_class: F2

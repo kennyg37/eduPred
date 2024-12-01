@@ -12,7 +12,7 @@ load_dotenv()
 app = Flask(__name__)
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-port = int(os.getenv("PORT", 5000))
+
 API_URL = os.getenv("API_URL", '/static/swagger.json')
 
 UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", '/tmp/uploads')
@@ -27,8 +27,10 @@ ED_TEMP_MODEL_PATH = os.getenv("ED_TEMP_MODEL_PATH", '/tmp/edupred.keras')
 
 MODEL_PATH = os.getenv("MODEL_PATH", './model/edupred.keras')
 model = None
-STUDENT_MODEL_PATH = os.getenv("STUDENT_MODEL_PATH", './model/student_model.keras')
+STUDENT_MODEL_PATH = os.getenv("STUDENT_MODEL_PATH", './model/student_gpa_model.keras')
 student_model = None
+STUDENT_SCALER_PATH = os.getenv("STUDENT_SCALER_PATH", './model/student_scaler.pkl')
+student_scaler = None
 
 @app.route('/', methods=['GET'])
 def home():
@@ -73,7 +75,9 @@ def retrain_endpoint():
     
 if os.path.exists(STUDENT_MODEL_PATH):
     from tensorflow.keras.models import load_model # type: ignore
+    import joblib
     student_model = load_model(STUDENT_MODEL_PATH)
+    student_scaler = joblib.load(STUDENT_SCALER_PATH) 
 
 @app.route('/student/predict', methods=['POST'])
 def predict_student_endpoint():
@@ -94,10 +98,10 @@ def predict_student_endpoint():
     try:
         feature_array = [data[key] for key in expected_features]
         feature_array = np.array(feature_array).reshape(1, -1)
-        scaled_features = scale_student_data(feature_array)
-        predictions = predict(student_model, scaled_features)
+        # scaled_features = student_scaler.fit_transform(feature_array )
+        predictions = predict(student_model, feature_array)
         predictions = [int(pred) if isinstance(pred, np.integer) else float(pred) for pred in predictions]
-        return jsonify({"predicted_gpa": predictions})
+        return jsonify({"predicted_gpa": predictions, "feature_array": feature_array.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -116,11 +120,12 @@ def retrain_student_endpoint():
             file_path = './data/Student_performance_data _.csv'
         # Retrain the mode using the retrain_model function
         new_model = retrain_student_model(file_path)
-        new_model.save(STUDENT_MODEL_PATH)
+        new_model.save(STUDENT_TEMP_MODEL_PATH)
         student_model = new_model
         return jsonify({"message": "Model retrained successfully."})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(port=port, debug=True)
+    port = int(os.getenv("PORT", 8080))
+    app.run(host="0.0.0.0", port=port, debug=True)

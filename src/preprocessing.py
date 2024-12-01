@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, StandardScaler
+import joblib
 
 def load_data(data_path):
     df = pd.read_csv(data_path)
@@ -45,6 +46,7 @@ def process_student_data(df):
 def scale_student_data(X):
     scaler = MinMaxScaler()
     X_scaled = scaler.fit_transform(X)
+    student_scaler = joblib.dump(scaler, 'tmp/student_scaler.pkl')
     return X_scaled
 
 def split_student_data(X, y):
