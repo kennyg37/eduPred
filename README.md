@@ -1,11 +1,8 @@
-```markdown
-# **Machine Learning Deployment Pipeline**  
+### Machine Learning Deployment Pipeline**  
 
-This project demonstrates the deployment of a Machine Learning (ML) model pipeline with functionalities for model prediction, retraining, bulk data uploads, and more. The deployment includes dockerized web applications for both the frontend and backend, hosted on cloud platforms.
+This project demonstrates the deployment of a Machine Learning (ML) model pipeline with functionalities for model prediction, retraining, bulk data uploads, and more. The deployment includes dockerized web applications for both the frontend and backend, hosted on cloud platforms. The dockerized application was deployed on google cloup platform and it uses the the google cloud run application. 
 
----
-
-## **Features**  
+## Features  
 1. **Model Prediction**  
    - Predict on a single data point (e.g., an image or selected CSV features).  
 
@@ -21,20 +18,18 @@ This project demonstrates the deployment of a Machine Learning (ML) model pipeli
 5. **Flood Simulation**  
    - Simulate requests using Locust to evaluate response time and latency under different loads.  
 
----
 
-## **Deployment Details**  
+## Deployment Details  
 
-- **Frontend**: [Deployed Frontend URL]()  
+- **Frontend**: [Deployed Frontend URL](https://edupred-fn.onrender.com)  
 - **Backend**: [Deployed Backend URL](https://new-flask-app-592896761758.us-east4.run.app/)  
 - **Docker Image**: [DockerHub Link](https://hub.docker.com/r/kennyg37/edupred)  
 - **Video Folder**: [Google Drive Link](https://drive.google.com/drive/folders/1cQYNznaFOkISp3LeiaqEULL9giL77I-9?usp=drive_link)  
 
----
 
-## **Steps to Run the Application**  
+## Steps to Run the Application  
 
-### **Using the Docker Image**  
+### Using the Docker Image  
 
 1. **Install Docker**  
    - Ensure Docker is installed on your machine. If not, download it from [Docker Official Website](https://www.docker.com).  
@@ -52,13 +47,12 @@ This project demonstrates the deployment of a Machine Learning (ML) model pipeli
 4. **Access the Application**  
    - Open your browser and navigate to `http://localhost` to interact with the app.  
 
----
 
 ## **Steps to Build Locally**  
 
 ### **1. Clone the Repository**  
 ```bash
-git clone https://github.com/your-repo.git
+git clone https://github.com/edupred.git
 cd project_name
 ```
 
@@ -107,21 +101,11 @@ Project_name/
 
 ---
 
-## **Flood Request Simulation Results**  
+## Flood Request Simulation Results  
 
 The application was tested under high traffic using Locust to simulate floods of requests.  
-### **Performance Metrics**  
-- **Response Time**: X ms (min), Y ms (average), Z ms (max).  
-- **Latency**: A ms.  
-- **Number of Requests**: B per second (peak).  
 
----
 
-## **Video Demo**  
-
-[Demo Link](#)
-
----
 
 ## **Requirements**  
 - Python 3.10 or later.  
@@ -133,19 +117,3 @@ The application was tested under high traffic using Locust to simulate floods of
 ## **Results**  
 ### **Model Evaluation**  
 - Metrics: Accuracy, Precision, Recall, F1-Score.  
-
-### **Visualizations**  
-1. Feature X tells Story Y.  
-2. Feature A has insights about B.  
-
----
-
-## **Submission Details**  
-
-1. **GitHub Repository**: [GitHub Link](#)  
-2. **Video Demo**: [YouTube Demo Link](#)  
-3. **Deployed URLs**:  
-   - [Frontend](#)  
-   - [Backend](#)  
-   - [Docker Image](#)  
-4. **Notebook**: Includes all preprocessing, training, and evaluation steps.  
