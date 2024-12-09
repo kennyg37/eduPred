@@ -105,6 +105,7 @@ Project_name/
 
 The application was tested under high traffic using Locust to simulate floods of requests.  
 
+![Screenshot 2024-12-09 093610](https://github.com/user-attachments/assets/e020680e-b623-40da-98e7-cbe2dee414b4)
 
 
 ## **Requirements**  
